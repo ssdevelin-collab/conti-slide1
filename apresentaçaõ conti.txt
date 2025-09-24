@@ -1,45 +1,36 @@
-New
-
-Share
-
-
-212 lines
-
-import pptx
-from pptx import Presentation
-from pptx.util import Inches, Pt
-from pptx.enum.text import PP_ALIGN
-from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.dml import MSO_THEME_COLOR
-import matplotlib.pyplot as plt
-import io
-def criar_apresentacao_continental():
-    # Criar nova apresentação
-    prs = Presentation()
+    def criar_apresentacao(self, filename):
+        prs = Presentation()
+        
+        # Slide 1 - Quem Sou Eu
+        self.criar_slide_apresentacao(prs)
+        
+        # Slide 2 - Gestão de Spends
+        self.criar_slide_gestao(prs)
+        
+        # Slide 3 - Destaques
+        self.criar_slide_destaques(prs)
+        
+        prs.save(filename)
+        print(f"Apresentação salva como: {filename}")
+    def criar_slide_apresentacao(self, prs):
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        # ... (implementação completa)
+        # [Resto do código como fornecido anteriormente]
+# Configuração executável
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Criar apresentação Continental')
+    parser.add_argument('--nome', required=True, help='Seu nome completo')
+    parser.add_argument('--cargo', required=True, help='Seu cargo')
+    parser.add_argument('--output', default='apresentacao_continental.pptx', help='Arquivo de saída')
     
-    # Configurar cores corporativas da Continental
-    azul_continental = RGBColor(0, 51, 153)    # #003399
-    vermelho_continental = RGBColor(255, 0, 0) # #FF0000
-    branco = RGBColor(255, 255, 255)           # #FFFFFF
-    preto = RGBColor(0, 0, 0)                 # #000000
-    cinza = RGBColor(100, 100, 100)           # #646464
+    args = parser.parse_args()
     
-    # ========== SLIDE 1 - QUEM SOU EU ==========
-    slide1 = prs.slides.add_slide(prs.slide_layouts[6])  # Layout em branco
-    
-    # Adicionar fundo com gradiente (simulado)
-    background = slide1.shapes.add_shape(
-        MSO_SHAPE.RECTANGLE, 0, 0, Inches(10), Inches(7.5)
+    apresentacao = ApresentacaoContinental(
+        nome=args.nome,
+        cargo=args.cargo,
+        tempo_empresa="5 anos",
+        experiencia="10+ anos em indústria automotiva",
+        formacao="Engenharia Mecânica - USP"
     )
-    background.fill.solid()
-    background.fill.fore_color.rgb = azul_continental
-    background.line.fill.background()
     
-    # Adicionar título
-    titulo_box = slide1.shapes.add_textbox(Inches(0.5), Inches(0.5), Inches(9), Inches(1))
-    titulo_frame = titulo_box.text_frame
-    titulo_frame.text = "QUEM SOU EU: JOÃO SILVA - CONTINENTAL"
-    titulo_frame.paragraphs[0].font.color.rgb = branco
-    titulo_frame.paragraphs[0].font.size = Pt(32)
-    titulo_frame.paragraphs[0].font.bold = True
+    apresentacao.criar_apresentacao(args.output)
